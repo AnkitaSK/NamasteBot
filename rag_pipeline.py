@@ -4,8 +4,9 @@ import os
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+# from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma  # Updated import path
 from langchain.chains import RetrievalQA
 from langdetect import detect
 from deep_translator import GoogleTranslator
