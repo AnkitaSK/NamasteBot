@@ -46,13 +46,16 @@ rag_tool = Tool(
 tools = [search_tool,rag_tool]
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-agent = initialize_agent(
-    tools=tools,
-    llm=llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True,
-    memory=memory
-)
+try:
+    agent = initialize_agent(
+        tools=tools,
+        llm=llm,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+        memory=memory
+    )
+except Exception as e:
+    print("Error initializing agent:", e)
 
 class Query(BaseModel):
     question: str
