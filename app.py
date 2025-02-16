@@ -24,12 +24,13 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
     
-    # Send request to FastAPI
-    response = requests.post(API_URL, json={"question": user_input})
-    if response.status_code == 200:
-        bot_response = response.json().get("response", "Error: No response received")
-    else:
-        bot_response = "Error: Unable to connect to backend"
+    # Show loader while waiting for response
+    with st.spinner("Thinking... 🤔"):
+        response = requests.post(API_URL, json={"question": user_input})
+        if response.status_code == 200:
+            bot_response = response.json().get("response", "Error: No response received")
+        else:
+            bot_response = "Error: Unable to connect to backend"
     
     # Add bot response to chat history
     st.session_state["messages"].append({"role": "assistant", "content": bot_response})
