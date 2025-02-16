@@ -52,17 +52,17 @@ def translate_back(text, lang):
     return text
 
 async def rag_pipeline_with_translation(query):
-    detected_lang = detect_language(query)
-    print(f"Detected Language: {detected_lang}")
+    # detected_lang = detect_language(query)
+    # print(f"Detected Language: {detected_lang}")
 
-    translated_query = translate_to_english(query, detected_lang)
-    print(f"Translated Query: {translated_query}")
+    # translated_query = translate_to_english(query, detected_lang)
+    # print(f"Translated Query: {translated_query}")
 
-    response = qa_chain.invoke(translated_query)
+    response = qa_chain.invoke(query)
     result_text = response["result"]
     print(f"Raw Response: {result_text}")
 
-    final_response = translate_back(result_text, detected_lang)
-    print(f"Final Translated Response: {final_response}")
+    # final_response = translate_back(result_text, detected_lang)
+    # print(f"Final Translated Response: {final_response}")
 
-    return final_response
+    return result_text
