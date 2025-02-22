@@ -23,7 +23,7 @@ docs = text_splitter.split_documents(documents)
 
 # Create Vector Store
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-vectorstore = Chroma.from_documents(docs, embedding_model, persist_directory="./chroma_db")
+vectorstore = Chroma.from_documents(docs, embedding_model, persist_directory="./tmp/chroma_db")
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
 # Create RetrievalQA Chain

@@ -149,7 +149,6 @@ class SyncCustomAgent:
         # Use the appropriate tool:
         if action == "Multilingual RAG":
             rag_result = run_rag_pipeline(action_input)
-            # response = asyncio.run(rag_pipeline(query))
             response = rag_result # Directly use the RAG result as the response.
         elif action == "Google Search":
             search_result = search.run(action_input)
