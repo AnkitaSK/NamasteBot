@@ -24,7 +24,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.tools import Tool
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_google_community import GoogleSearchResults, GoogleSearchAPIWrapper
-from rag_pipeline import rag_pipeline_with_translation
+from rag_pipeline import rag_pipeline
 
 # Define prompt template for structured responses
 custom_prompt = PromptTemplate(
@@ -53,8 +53,8 @@ memory = ConversationBufferMemory(memory_key="chat_history", return_messages=Tru
 memory.chat_memory.add_message(SystemMessage(content="You are a helpful assistant."))
 
 # Define tools (RAG & Google Search)
-GOOGLE_API_KEY = "AIzaSyCRgdG7aYZD74STvn9LJNC812LEgJT0a7A"
-GOOGLE_CSE_ID = "d5eebcc0392094387"
+GOOGLE_API_KEY = "AIzaSyBNu0Ea8aWQ1JnvXDOqSsnmH8Q2xZS7qww"
+GOOGLE_CSE_ID = "f481134eb108c4222"
 
 search = GoogleSearchResults(api_wrapper=GoogleSearchAPIWrapper(
     google_api_key=GOOGLE_API_KEY,
@@ -68,7 +68,7 @@ search_tool = Tool(
 )
 
 def run_rag_pipeline(query):
-    return rag_pipeline_with_translation(query)  # Sync call
+    return rag_pipeline(query)  # Sync call
 
 rag_tool = Tool(
     name="Multilingual RAG",

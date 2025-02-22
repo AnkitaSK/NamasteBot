@@ -12,7 +12,7 @@ from langdetect import detect
 from deep_translator import GoogleTranslator
 
 # Configure Google Gemini API
-GOOGLE_API_KEY = 'AIzaSyCRgdG7aYZD74STvn9LJNC812LEgJT0a7A' #os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = 'AIzaSyBNu0Ea8aWQ1JnvXDOqSsnmH8Q2xZS7qww' #os.getenv("GOOGLE_API_KEY")
 llm = GoogleGenerativeAI(model="gemini-1.5-pro-latest", google_api_key=GOOGLE_API_KEY)
 
 # Load and Process PDF
@@ -51,7 +51,7 @@ def translate_back(text, lang):
         return GoogleTranslator(source="en", target=lang).translate(text)
     return text
 
-async def rag_pipeline_with_translation(query):
+async def rag_pipeline(query):
     # detected_lang = detect_language(query)
     # print(f"Detected Language: {detected_lang}")
 
