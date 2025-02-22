@@ -51,7 +51,7 @@ def translate_back(text, lang):
         return GoogleTranslator(source="en", target=lang).translate(text)
     return text
 
-async def rag_pipeline(query):
+def rag_pipeline(query):
     # detected_lang = detect_language(query)
     # print(f"Detected Language: {detected_lang}")
 

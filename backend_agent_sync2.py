@@ -7,6 +7,7 @@ from langchain.tools import Tool
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_google_community import GoogleSearchResults, GoogleSearchAPIWrapper
 from rag_pipeline import rag_pipeline
+import asyncio
 
 class FollowUpTracker:
     def __init__(self):
@@ -144,6 +145,7 @@ class SyncCustomAgent:
         chat_history = self.memory.chat_memory.messages
         formatted_prompt = self.prompt.format(input=full_query, chat_history=chat_history)
         response = self.llm.invoke(formatted_prompt)
+        # response = asyncio.run(rag_pipeline(query))
 
         self.memory.chat_memory.add_message(HumanMessage(content=query))
         self.memory.chat_memory.add_message(AIMessage(content=response))
