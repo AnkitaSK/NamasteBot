@@ -4,8 +4,8 @@ import requests
 # FastAPI backend URL
 API_URL = "http://localhost:8000/chat"
 
-st.title("NamasteBot 🤖")
-st.write("A multilingual chatbot powered by RAG.")
+st.title("Namaste! 🙏")
+st.write("Chat with me for information on visiting Goa and Haridwar")
 
 # Chat history
 if "messages" not in st.session_state:

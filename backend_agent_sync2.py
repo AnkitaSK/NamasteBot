@@ -47,7 +47,7 @@ def detect_follow_up_question(query: str):
 custom_prompt = PromptTemplate(
     input_variables=["input", "chat_history"],
     template="""
-You are NamasteBot, a multilingual AI assistant.
+You are a multilingual AI assistant.
 - Answer queries in the same language as the user.
 - Retrieve knowledge from the **RAG pipeline**.
 - Use **Google Search** for real-time information.
@@ -105,6 +105,7 @@ class SyncCustomAgent:
         self.prompt = prompt
         self.pending_follow_up = None  # Track follow-up questions
         self.follow_up_tracker = FollowUpTracker()  # Initialize follow-up tracker
+        self.first_response = True  # Track first response
 
     def invoke(self, query):
         print("\n> Entering new agentExecutor chain...")
@@ -133,7 +134,7 @@ class SyncCustomAgent:
             action = "Google Search"
             action_input = f"best {query}"
         else:
-            action = "Multilingual RAG"
+            action = "RAG"
             action_input = query
 
         print(f"Action: {action}")
