@@ -34,7 +34,7 @@ custom_prompt = PromptTemplate(
 You are NamasteBot, a multilingual AI assistant.
 - Answer queries in the same language as the user.
 - Retrieve knowledge from the **RAG pipeline**.
-- Use **Google Search** for real-time information.
+- Use **llm** for real-time information.
 - If a follow-up question is required, ask it before answering.
 
 ### **Chat History:**  
@@ -57,16 +57,10 @@ memory.chat_memory.add_message(SystemMessage(content="You are a helpful assistan
 GOOGLE_API_KEY = "AIzaSyBNu0Ea8aWQ1JnvXDOqSsnmH8Q2xZS7qww"
 GOOGLE_CSE_ID = "f481134eb108c4222"
 
-search = GoogleSearchResults(api_wrapper=GoogleSearchAPIWrapper(
-    google_api_key=GOOGLE_API_KEY,
-    google_cse_id=GOOGLE_CSE_ID
-))
-
-search_tool = Tool(
-    name="Google Search",
-    func=search.run,
-    description="Search the web for real-time information."
-)
+# search = GoogleSearchResults(api_wrapper=GoogleSearchAPIWrapper(
+#     google_api_key=GOOGLE_API_KEY,
+#     google_cse_id=GOOGLE_CSE_ID
+# ))
 
 def run_rag_pipeline(query):
     return rag_pipeline(query)  # Sync call
@@ -116,6 +110,8 @@ class SyncCustomAgent:
             "I don’t have enough relevant information on this topic",
             "This text contains historical details but lacks a direct answer",
             "This text doesn't mention",
+            "This text focuses on Goa,",
+            "This text does not contain any information about "
         ]
 
         if rag_result and len(rag_result.strip()) > 5 and not any(phrase in rag_result for phrase in generic_rag_responses):
@@ -142,7 +138,7 @@ class SyncCustomAgent:
 
 
 # Initialize synchronous agent
-sync_agent = SyncCustomAgent(llm=llm, tools=[search_tool, rag_tool], memory=memory, prompt=custom_prompt)
+sync_agent = SyncCustomAgent(llm=llm, tools=[rag_tool], memory=memory, prompt=custom_prompt)
 
 
 from fastapi import FastAPI, HTTPException
