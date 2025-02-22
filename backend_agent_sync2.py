@@ -155,7 +155,7 @@ class SyncCustomAgent:
         return response    
     
 # Initialize synchronous agent
-sync_agent = SyncCustomAgent(llm=llm, tools=[search_tool, rag_tool], memory=memory, prompt=custom_prompt)
+sync_agent = SyncCustomAgent(llm=llm, tools=[rag_tool], memory=memory, prompt=custom_prompt)
 
 
 from fastapi import FastAPI, HTTPException

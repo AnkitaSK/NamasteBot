@@ -1,59 +1,131 @@
-# NamasteBot - Multilingual AI Assistant
+# Multilingual AI Chatbot
 
-## Overview
-NamasteBot is a powerful multilingual AI assistant that integrates **real-time search, knowledge retrieval, and advanced language generation** to provide accurate and context-aware responses. It leverages:
-
-- **Google Search** for live updates
-- **RAG pipeline** for structured knowledge retrieval
-- **Gemini AI** for natural language responses
-- **Conversation memory** for maintaining context
-- **Follow-up question detection** for engaging interactions
-
-This combination of tools ensures **relevant, personalized, and multilingual assistance** for various queries, including travel, dining, and general information.
+This project implements a multilingual AI chatbot using **LangChain**, **Google Generative AI (Gemini)**, **Google Search**, and a **Retrieval-Augmented Generation (RAG) pipeline**. The chatbot can answer user queries, retrieve knowledge from the RAG pipeline, and fetch real-time information via Google Search. It also intelligently asks follow-up questions when necessary.
 
 ---
 
-## Architecture Overview
+## **Architecture Overview**
 
-NamasteBot is built using **FastAPI**, **LangChain**, **Google Generative AI (Gemini-1.5-Pro)**, and a **Retrieval-Augmented Generation (RAG) pipeline** to deliver intelligent responses.
-
-### **1. Tools and Their Roles**
-
-| Tool Name                | Purpose |
-|--------------------------|---------|
-| **Google Search**        | Fetches **real-time** information from the web. |
-| **RAG**                  | Retrieves **domain-specific** knowledge. |
-| **Google Generative AI** | Generates **natural, structured** responses. |
-| **Conversation Memory**  | Stores **chat history** for context-awareness. |
-| **Follow-up Detector**   | Asks **clarifying questions** before responding. |
-
----
-
-### **2. Tools in Detail**
-
-#### **Google Search (Real-time Information Retrieval)**  
-- Uses `GoogleSearchResults` from `langchain_google_community` to fetch fresh data from the web.
-- Example Use Case: "current weather in Berlin."
-
-#### **RAG Pipeline (Knowledge Base Retrieval)**  
-- Custom module (`rag_pipeline`) integrated with **ChromaDB** and **MiniLM embeddings**.
-- Example Use Case: "Places to visit in Goa"
-
-#### **Google Generative AI (LLM for Response Generation)**  
-- Uses **Gemini-1.5-Pro** to generate structured, multilingual responses.
-- Processes chat history and user queries.
-
-#### **Conversation Memory (Context Retention)**  
-- Uses `ConversationBufferMemory` from `langchain.memory` to store past messages.
-- Helps maintain logical flow in conversations.
-
-#### **Follow-up Question Detector (Regex-based Classification)**  
-- Identifies whether a follow-up question is needed before responding.
-- Example: If the user asks, "Recommend a restaurant," it first asks:  
-  **"Do you prefer vegetarian or non-vegetarian food?"**
+### **System Components:**
+1. **User Query Processing**
+   - The query is processed to detect follow-up questions and determine the best retrieval method.
+2. **Follow-up Question Tracker**
+   - Limits follow-ups to avoid excessive back-and-forth.
+3. **RAG Pipeline**
+   - Fetches multilingual responses from a pre-built knowledge base.
+4. **Google Search API**
+   - Retrieves real-time information when required.
+5. **Google Gemini AI**
+   - Generates conversational responses.
+6. **FastAPI Server**
+   - Exposes an API endpoint (`/chat`) for external integration.
 
 ---
 
-## **Conclusion**
-NamasteBot combines **real-time search, knowledge retrieval, and advanced AI-powered conversations** to deliver **accurate, engaging, and multilingual** responses. By leveraging **Google Search, RAG, and Gemini AI**, it ensures a seamless and intelligent user experience. 🚀
+## **Flow Diagram**
+
+```plaintext
++--------------------+
+|    User Input     |
++--------+---------+
+         |
+         v
++-------------------+
+|  Follow-up Check |
++-------------------+
+         |
+         v
++----------------------------+
+| Determine Search Strategy |
+| (Google Search or RAG)    |
++----------------------------+
+         |
+         v
++----------------------------+
+|  Fetch Relevant Response  |
+| (Search or Knowledge Base)|
++----------------------------+
+         |
+         v
++-------------------+
+|  Generate Reply  |
+|  (Gemini AI)    |
++-------------------+
+         |
+         v
++-------------------+
+|  Return Output   |
++-------------------+
+```
+
+---
+
+## **Installation & Setup**
+
+### **1. Clone the repository**
+```sh
+git clone https://github.com/your-repo/multilingual-chatbot.git
+cd multilingual-chatbot
+```
+
+### **2. Install dependencies**
+```sh
+pip install -r requirements.txt
+```
+
+### **3. Set up environment variables**
+Create a `.env` file and add your API keys:
+```env
+GOOGLE_API_KEY=your_google_api_key
+GOOGLE_CSE_ID=your_google_cse_id
+```
+
+### **4. Run the FastAPI server**
+```sh
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+---
+
+## **API Usage**
+
+### **Endpoint:**
+```
+POST /chat
+```
+### **Request Body:**
+```json
+{
+  "question": "What are the best places to visit in Goa?"
+}
+```
+### **Response:**
+```json
+{
+  "response": "Do you prefer historical sites or natural attractions?"
+}
+```
+
+---
+
+## **Features**
+✅ Multilingual query handling  
+✅ Intelligent follow-up questions  
+✅ Uses RAG for contextual knowledge retrieval  
+✅ Google Search for real-time data  
+✅ FastAPI backend for seamless API integration  
+
+---
+
+## **Future Enhancements**
+- Improve response ranking based on query type
+- Add caching for frequently asked queries
+- Integrate user feedback for response refinement
+
+---
+
+### **Contributors**
+Ankita Kalangutkar - [GitHub Profile](https://github.com/AnkitaSK)
+
+Feel free to contribute and improve the project!
 
