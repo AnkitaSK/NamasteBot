@@ -144,15 +144,22 @@ class SyncCustomAgent:
         print(f"Thought: I now have enough information to answer the query.\n")
 
         chat_history = self.memory.chat_memory.messages
-        formatted_prompt = self.prompt.format(input=full_query, chat_history=chat_history)
+        # formatted_prompt = self.prompt.format(input=full_query, chat_history=chat_history)
 
         # Use the appropriate tool:
         if action == "Multilingual RAG":
             rag_result = run_rag_pipeline(action_input)
-            response = rag_result # Directly use the RAG result as the response.
+            response = rag_result
+            # Check if RAG result is empty or insufficient. If so, fallback to Google Search
+            if not response or len(response.strip()) < 5: # Customize "insufficient" criteria
+                print("RAG result insufficient. Falling back to Google Search.")
+                action = "Google Search"
+                action_input = query
+                search_result = search.run(action_input)
+                response = search_result
         elif action == "Google Search":
             search_result = search.run(action_input)
-            response = search_result # Directly use the search result as the response.
+            response = search_result
         else:
             response = "Error: Invalid action."
 
