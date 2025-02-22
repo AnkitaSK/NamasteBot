@@ -110,7 +110,15 @@ class SyncCustomAgent:
         print(f"Thought: Checking RAG for relevant knowledge...\n")
         rag_result = run_rag_pipeline(full_query)
 
-        if rag_result and len(rag_result.strip()) > 5:  # Ensure meaningful response
+        # List of generic or unhelpful RAG responses
+        generic_rag_responses = [
+            "This text focuses on Goa and Portuguese colonization",
+            "I don’t have enough relevant information on this topic",
+            "This text contains historical details but lacks a direct answer",
+            "This text doesn't mention",
+        ]
+
+        if rag_result and len(rag_result.strip()) > 5 and not any(phrase in rag_result for phrase in generic_rag_responses):
             response = rag_result
             print("RAG Response Found ✅")
         else:
@@ -130,6 +138,7 @@ class SyncCustomAgent:
         print("> Finished chain.\n")
 
         return response
+
 
 
 # Initialize synchronous agent
