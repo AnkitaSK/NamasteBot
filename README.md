@@ -1,4 +1,4 @@
-# Multilingual AI Chatbot
+# NamasteBot 
 
 This project implements a multilingual AI chatbot using **LangChain**, **Google Generative AI (Gemini)**, **Google Search**, and a **Retrieval-Augmented Generation (RAG) pipeline**. The chatbot can answer user queries, retrieve knowledge from the RAG pipeline, and fetch real-time information via Google Search. It also intelligently asks follow-up questions when necessary.
 

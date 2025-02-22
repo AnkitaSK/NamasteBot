@@ -1,4 +1,5 @@
 import re
+import asyncio
 
 def detect_follow_up_question(query: str):
     """Check if a follow-up question is needed based on the user query."""
@@ -89,59 +90,47 @@ class SyncCustomAgent:
         self.pending_follow_up = None  # Track follow-up questions
 
     def invoke(self, query):
-        """Process user query, handle follow-ups, and generate responses with logging"""
+        """Process user query, handle follow-ups, and generate responses with RAG first."""
         print("\n> Entering new agentExecutor chain...")
-        # Check if there was a pending follow-up
+
         if self.pending_follow_up:
             full_query = f"Follow-up response: {query}"
-            self.pending_follow_up = None  # Reset follow-up
+            self.pending_follow_up = None
         else:
             follow_up_question = detect_follow_up_question(query)
             if follow_up_question:
                 self.pending_follow_up = follow_up_question
-                return follow_up_question  # Ask follow-up before answering
+                return follow_up_question  
 
             full_query = query
-        # Log user question
+
         print(f"Question: {query}\n")
+    
+        # Try using the RAG pipeline first
+        print(f"Thought: Checking RAG for relevant knowledge...\n")
+        rag_result = run_rag_pipeline(full_query)
 
-        # Generate Thought
-        thought = f"I need to find information about {query}. I will decide whether to use Google Search or RAG."
-        print(f"Thought: {thought}\n")
-
-        # Decide which tool to use
-        if "restaurant" in query.lower() or "place to eat" in query.lower():
-            action = "Google Search"
-            action_input = f"best {query}"
+        if rag_result and len(rag_result.strip()) > 5:  # Ensure meaningful response
+            response = rag_result
+            print("RAG Response Found ✅")
         else:
-            action = "Multilingual RAG"
-            action_input = query
+            print("RAG result insufficient. Falling back to LLM ❌")
+            # Format the prompt
+            chat_history = self.memory.chat_memory.messages
+            formatted_prompt = self.prompt.format(input=full_query, chat_history=chat_history)
 
-        print(f"Action: {action}")
-        print(f"Action Input: {action_input}\n")
-
-        # Generate final thought
-        final_thought = f"I now have enough information to answer the query."
-        print(f"Thought: {final_thought}\n")
-
-        # Get chat history
-        chat_history = self.memory.chat_memory.messages
-
-        # Format the prompt
-        formatted_prompt = self.prompt.format(input=full_query, chat_history=chat_history)
-
-        # Get response from LLM
-        response = self.llm.invoke(formatted_prompt)
+            # Use the LLM for response generation
+            response = self.llm.invoke(formatted_prompt)
 
         # Store conversation in memory
         self.memory.chat_memory.add_message(HumanMessage(content=query))
         self.memory.chat_memory.add_message(AIMessage(content=response))
 
-        # Log final response
         print(f"Final Answer: {response}\n")
         print("> Finished chain.\n")
 
         return response
+
 
 # Initialize synchronous agent
 sync_agent = SyncCustomAgent(llm=llm, tools=[search_tool, rag_tool], memory=memory, prompt=custom_prompt)
